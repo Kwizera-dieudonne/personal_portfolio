@@ -4,5 +4,9 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base:"/kwizera-portfolio",
+  base:"/personal_portfolio",
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+  }
 })
