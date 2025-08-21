@@ -3,8 +3,8 @@ import { Github, Linkedin} from 'lucide-react';
 
 const Footer = () => {
   const socialLinks = [
-    { icon: Github, href: 'https://github.com/Kwizera-dieudonne/', label: 'GitHub' },
-    { icon: Linkedin, href: 'https://https://www.linkedin.com/in/kwizera-dieudonne-915434359/', label: 'LinkedIn' },
+    { icon: Github, href: 'https://github.com/Kwizera-dieudonne', label: 'GitHub' },
+    { icon: Linkedin, href: 'https://https://www.linkedin.com/in/kwizera-dieudonne-915434359', label: 'LinkedIn' },
    
   ];
 
