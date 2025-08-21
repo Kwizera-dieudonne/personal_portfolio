@@ -2,6 +2,17 @@
 import { Download, FileText, Mail } from 'lucide-react';
 
 const Resume = () => {
+
+  const handleDownload = (fileName: string) => {
+    // Create a temporary anchor element
+    const link = document.createElement('a');
+    link.href = `/documents/${fileName}`;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <section id="resume" className="py-20 bg-white">
       <div className="container mx-auto px-4">
@@ -20,7 +31,9 @@ const Resume = () => {
               <p className="text-gray-600 mb-6 text-sm">
                 Comprehensive overview of my experience, skills, and achievements
               </p>
-              <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full font-medium transition-colors flex items-center gap-2 mx-auto">
+              <button 
+                onClick={() => handleDownload('resume.pdf')}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full font-medium transition-colors flex items-center gap-2 mx-auto">
                 <Download size={16} />
                 Download PDF
               </button>
@@ -34,7 +47,9 @@ const Resume = () => {
               <p className="text-gray-600 mb-6 text-sm">
                 Personalized cover letter template highlighting my passion and goals
               </p>
-              <button className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-full font-medium transition-colors flex items-center gap-2 mx-auto">
+              <button
+                onClick={() => handleDownload('cover-letter.pdf')}
+                className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-full font-medium transition-colors flex items-center gap-2 mx-auto">
                 <Download size={16} />
                 Download PDF
               </button>
@@ -48,7 +63,9 @@ const Resume = () => {
               <p className="text-gray-600 mb-6 text-sm">
                 Professional references and recommendation letters
               </p>
-              <button className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-full font-medium transition-colors flex items-center gap-2 mx-auto">
+              <button 
+                onClick={() => handleDownload('references.pdf')}
+                className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-full font-medium transition-colors flex items-center gap-2 mx-auto">
                 <Download size={16} />
                 Download PDF
               </button>
