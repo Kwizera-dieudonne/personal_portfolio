@@ -1,12 +1,11 @@
 
-import { Github, Linkedin, Twitter, Mail } from 'lucide-react';
+import { Github, Linkedin} from 'lucide-react';
 
 const Footer = () => {
   const socialLinks = [
-    { icon: Github, href: 'https://github.com/yourusername', label: 'GitHub' },
-    { icon: Linkedin, href: 'https://linkedin.com/in/yourusername', label: 'LinkedIn' },
-    { icon: Twitter, href: 'https://twitter.com/yourusername', label: 'Twitter' },
-    { icon: Mail, href: 'mailto:your.email@example.com', label: 'Email' },
+    { icon: Github, href: 'https://github.com/Kwizera-dieudonne/', label: 'GitHub' },
+    { icon: Linkedin, href: 'https://https://www.linkedin.com/in/kwizera-dieudonne-915434359/', label: 'LinkedIn' },
+   
   ];
 
   return (
@@ -32,11 +31,6 @@ const Footer = () => {
                 </a>
               );
             })}
-          </div>
-          
-          <div className="text-gray-500 text-sm">
-            <p>© 2024 Your Name. All rights reserved.</p>
-            <p className="mt-2">Built with React, TypeScript, and Tailwind CSS</p>
           </div>
         </div>
       </div>
