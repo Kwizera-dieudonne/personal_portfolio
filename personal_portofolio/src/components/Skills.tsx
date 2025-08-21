@@ -15,7 +15,7 @@ const Skills = () => {
           <h2 className="text-4xl font-bold text-center text-gray-900 mb-16">Technical Skills</h2>
           
           <div className="grid md:grid-cols-2 gap-8">
-            {skills.map((skill, index) => (
+            {skills.map((skill) => (
               <div key={skill.name} className="space-y-2">
                 <div className="flex justify-between items-center">
                   <h3 className="text-lg font-semibold text-gray-800">{skill.name}</h3>
