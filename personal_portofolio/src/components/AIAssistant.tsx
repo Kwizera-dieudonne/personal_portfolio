@@ -10,43 +10,49 @@ const AIAssistant = () => {
     }
   ]);
   const [inputMessage, setInputMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const predefinedResponses = {
-    skills: "I specialize in Python Django, Java Spring Boot, HTML/CSS, SQL, and Git/GitHub. I also have experience with JavaScript, various databases, and cloud platforms like AWS and Heroku.",
-    experience: "I'm a full-stack developer with expertise in both frontend and backend technologies. I've worked on e-commerce platforms, APIs, and various web applications.",
-    projects: "Some of my notable projects include an e-commerce platform built with Django and React, a task management API with Spring Boot, and several portfolio websites. You can check out the portfolio section for more details!",
-    contact: "You can reach me through the contact form on this website, or connect with me on LinkedIn, GitHub, or via email. I'm always open to discussing new opportunities!",
-    education: "I have a strong background in computer science and software development, with continuous learning in modern web technologies and frameworks.",
-    default: "That's an interesting question! Feel free to ask me about my skills, projects, experience, or anything else you'd like to know. You can also use the contact form to reach out directly."
-  };
-
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (!inputMessage.trim()) return;
 
     const userMessage = inputMessage.trim();
     setMessages(prev => [...prev, { type: 'user', content: userMessage }]);
-    
-    // Simple keyword-based responses
-    let botResponse = predefinedResponses.default;
-    const lowerMessage = userMessage.toLowerCase();
-    
-    if (lowerMessage.includes('skill') || lowerMessage.includes('technology')) {
-      botResponse = predefinedResponses.skills;
-    } else if (lowerMessage.includes('experience') || lowerMessage.includes('work')) {
-      botResponse = predefinedResponses.experience;
-    } else if (lowerMessage.includes('project') || lowerMessage.includes('portfolio')) {
-      botResponse = predefinedResponses.projects;
-    } else if (lowerMessage.includes('contact') || lowerMessage.includes('reach')) {
-      botResponse = predefinedResponses.contact;
-    } else if (lowerMessage.includes('education') || lowerMessage.includes('study')) {
-      botResponse = predefinedResponses.education;
-    }
-
-    setTimeout(() => {
-      setMessages(prev => [...prev, { type: 'bot', content: botResponse }]);
-    }, 500);
-
     setInputMessage('');
+    setIsLoading(true);
+
+    try {
+      // Send message to Make.com webhook
+      const response = await fetch('https://hook.eu2.make.com/z88e7yu9nor9iw75gji8qjw3o17wos6k', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: userMessage,
+          intent: 'question'
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      
+      // Add AI response to chat
+      setMessages(prev => [...prev, { 
+        type: 'bot', 
+        content: data.response || data.message || "I received your message but didn't get a proper response."
+      }]);
+    } catch (error) {
+      console.error('Error calling AI:', error);
+      setMessages(prev => [...prev, { 
+        type: 'bot', 
+        content: "I'm having trouble connecting right now. Please try again later or use the contact form." 
+      }]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -102,6 +108,13 @@ const AIAssistant = () => {
               </div>
             </div>
           ))}
+          {isLoading && (
+            <div className="flex justify-start">
+              <div className="bg-gray-100 text-gray-800 p-3 rounded-2xl text-sm mr-4">
+                Thinking...
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Input */}
@@ -114,10 +127,12 @@ const AIAssistant = () => {
               onKeyPress={handleKeyPress}
               placeholder="Ask me about my skills, projects, or experience..."
               className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+              disabled={isLoading}
             />
             <button
               onClick={handleSendMessage}
-              className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg transition-colors"
+              disabled={isLoading || !inputMessage.trim()}
+              className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white p-2 rounded-lg transition-colors"
             >
               <Send size={16} />
             </button>

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Send, Shield } from 'lucide-react';
-import emailjs from 'emailjs-com';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -23,30 +22,25 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      await emailjs.send(
-        'service_zoe4rvr', // Replace with your EmailJS service ID
-        'template_s9nehmr', // Replace with your EmailJS template ID
-        {
+      // Send to Make.com webhook
+      const response = await fetch('https://hook.eu2.make.com/z88e7yu9nor9iw75gji8qjw3o17wos6k', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
           name: formData.name,
           email: formData.email,
           subject: formData.subject,
           message: formData.message,
-          //to_email: 'kwizerad200@gmail.com'
-        },
-        'Z-_y5zVwS7RS-gwyr' // Replace with your EmailJS public key
-      );
+          intent: 'message'
+        }),
+      });
 
-      await emailjs.send(
-        'service_zoe4rvr', // same service ID
-        'template_mozuf2j', // your auto-reply template ID
-        {
-          name: formData.name,
-          email: formData.email, 
-          message: formData.message,
-        },
-        'Z-_y5zVwS7RS-gwyr'
-      );
-      
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
       setSubmitStatus('success');
       setFormData({ name: '', email: '', subject: '', message: '' });
       setCaptchaVerified(false);
@@ -55,17 +49,9 @@ const Contact = () => {
       setSubmitStatus('error');
     } finally {
       setIsSubmitting(false);
-      // Reset status after 3 seconds
       setTimeout(() => setSubmitStatus('idle'), 3000);
     }
   };
-
-    // Handle form submission
-  //   console.log('Form submitted:', formData);
-  //   alert('Thank you for your message! I will get back to you soon.');
-  //   setFormData({ name: '', email: '', subject: '', message: '' });
-  //   setCaptchaVerified(false);
-  // };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -105,7 +91,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-900">Phone</h4>
-                    <p className="text-gray-600">(+250)  790 808 728</p>
+                    <p className="text-gray-600">(+250) 790 808 728</p>
                   </div>
                 </div>
                 
@@ -211,13 +197,6 @@ const Contact = () => {
                   </div>
                 </div>
                 
-                {/* <button
-                  type="submit"
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors flex items-center justify-center gap-2"
-                >
-                  <Send size={20} />
-                  Send Message
-                </button> */}
                 <button
                   type="submit"
                   disabled={isSubmitting}
