@@ -42,7 +42,7 @@ const AIAssistant = () => {
       // Add AI response to chat
       setMessages(prev => [...prev, { 
         type: 'bot', 
-        content: data.response || data.message || "I received your message but didn't get a proper response."
+        content: data.generated_text || data[0]?.generated_text || "I received your message but didn't get a proper response."
       }]);
     } catch (error) {
       console.error('Error calling AI:', error);
